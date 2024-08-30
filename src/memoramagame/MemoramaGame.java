@@ -10,7 +10,7 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
 
     private Accion[][] botones = new Accion[6][6];
     private JButton jugar;
-    private JLabel puntaje, numMovs, titulo, logo, reloj, tiempo, puntuacion, movs, seleccionarLabel;
+    private JLabel puntaje, numMovs, titulo, logo, reloj, tiempo, puntuacion, movs, seleccionarLabel, tiempoRestanteLabel;
     private Image I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, I17, I18, oculto;
     private ImageIcon iconoOculto, icono1, icono2, icono3, icono4, icono5, icono6, icono7, icono8, icono9, icono10, icono11, icono12, icono13, icono14, icono15, icono16, icono17, icono18;
     private Color fondo = new Color(0, 0, 0);
@@ -380,6 +380,13 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
         dificultad.addActionListener(this);
         panel.add(dificultad);
 
+        tiempoRestanteLabel = new JLabel("Tiempo restante:");
+        tiempoRestanteLabel.setBounds(80, 130, 500, 43);
+        auxFont = tiempoRestanteLabel.getFont();
+        tiempoRestanteLabel.setFont(new Font(auxFont.getFontName(), auxFont.getStyle(), 20));
+        tiempoRestanteLabel.setForeground(Color.BLACK);
+        panel.add(tiempoRestanteLabel);
+
         tiempo = new JLabel("000");
         tiempo.setBounds(160, 180, 100, 100);
         auxFont = tiempo.getFont();
@@ -420,6 +427,7 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
             tiempo.setText(String.valueOf(tiempoRestante));
             if (tiempoRestante <= 0) {
                 timer.stop();
+                estado("../recursos/perder.png", false);
             }
         });
         timer.start();
@@ -441,6 +449,7 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
                 estado("../recursos/ganar.png", true);
             }
 
+
         } else {
             puntos--;
             movimientos++;
@@ -452,36 +461,36 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
         pulsado = false;
     }
 
-    private void cambiarEstado() {
-        this.estado = (this.estado + 1) % 3;
-        switch (estado) {
-            case 0 -> {
+    private void cambiarEstado(String text) {
+        //this.estado = (this.estado + 1) % 3;
+        switch (text) {
+            case "Reintentar" -> {
                 jugar.setText("Comenzar");
-                accionEstado1();
+                accionAlPerder();
             }
-            case 1 -> {
+            case "Comenzar" -> {
                 jugar.setText("Rendirse");
-                accionEstado2();
+                accionAlComenzar();
             }
-            case 2 -> {
+            case "Rendirse" -> {
                 jugar.setText("Reintentar");
-                accionEstado3();
+                accionAntesDeComenzar();
             }
         }
     }
 
-    private void accionEstado1() {
+    private void accionAlPerder() {
         dispose();
         ventana();
         System.out.println("Se reinicio");
     }
 
-    private void accionEstado2() {
+    private void accionAlComenzar() {
         temporizador();
         System.out.println("Comenzo el juego");
     }
 
-    private void accionEstado3() {
+    private void accionAntesDeComenzar() {
         estado("../recursos/perder.png", false);
         System.out.println("Termino el juego");
     }
@@ -501,11 +510,13 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
             System.out.println("Ganador");
             timer.stop();
             this.estado = 1;
+            jugar.setText("Reintentar");
         } else {
             titulo.setIcon(imagenT);
             System.out.println("Perdiste");
             timer.stop();
             this.estado = 2;
+            jugar.setText("Reintentar");
         }
     }
 
@@ -688,13 +699,12 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == jugar) {
-
-            cambiarEstado();
+            if (Objects.equals(dificultad.getSelectedItem(), "")) {
+                JOptionPane.showMessageDialog(null, "Selecciona la dificultad.");
+            } else {
+                cambiarEstado(jugar.getText());
+            }
         }
-
-       /* if (e.getSource() == reintentar) {
-
-        }*/
 
         if (e.getSource() == dificultad) {
             mandarTiempo();
