@@ -2,7 +2,12 @@ package memoramagame;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.util.*;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import javax.swing.Timer;
 
@@ -11,21 +16,21 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
     private Accion anterior = new Accion();
     private Accion[][] botones = new Accion[6][6];
 
-    private JButton jugar;
-    private JLabel puntaje, numMovs, titulo, logo, reloj, tiempo, puntuacion, movs, seleccionarLabel, tiempoRestanteLabel;
-    private Image I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, I17, I18, oculto;
-    private ImageIcon iconoOculto, icono1, icono2, icono3, icono4, icono5, icono6, icono7, icono8, icono9, icono10, icono11, icono12, icono13, icono14, icono15, icono16, icono17, icono18;
-    private ImageIcon imagenT, imagenL, imagenR;
-    private Color fondo = new Color(0, 0, 0);
-    private JPanel panel;
-    private Font auxFont;
-    private JComboBox dificultad;
+    private final JButton jugar;
+    private final JLabel puntaje;
+    private final JLabel numMovs;
+    private final JLabel titulo;
+    private final JLabel tiempo;
+    private final ImageIcon iconoOculto;
+    private final ImageIcon imagenL;
+    private ImageIcon imagenT;
+    private final JComboBox dificultad;
     private Timer timer;
-
     private int posicion, tiempoRestante;
     private int puntos = 0, movimientos = 0, restantes = 18;
     private int[] verificador = new int[18];
-    private boolean correcto = false, pulsado = false, fallo = false;
+    private boolean pulsado = false;
+    private boolean fallo = false;
 
     public MemoramaGame() {
         setLayout(null);
@@ -34,66 +39,66 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
 
         setIconImage(new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/oculto.png"))).getImage());
 
-        oculto = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/oculto.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT);
+        Image oculto = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/oculto.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT);
         iconoOculto = new ImageIcon(oculto);
 
-        I1 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/1.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        icono1 = new ImageIcon(I1);
+        Image i1 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/1.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        ImageIcon icono1 = new ImageIcon(i1);
 
-        I2 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/2.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        icono2 = new ImageIcon(I2);
+        Image I2 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/2.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        ImageIcon icono2 = new ImageIcon(I2);
 
-        I3 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/3.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        icono3 = new ImageIcon(I3);
+        Image I3 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/3.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        ImageIcon icono3 = new ImageIcon(I3);
 
-        I4 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/4.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        icono4 = new ImageIcon(I4);
+        Image I4 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/4.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        ImageIcon icono4 = new ImageIcon(I4);
 
-        I5 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/5.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        icono5 = new ImageIcon(I5);
+        Image I5 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/5.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        ImageIcon icono5 = new ImageIcon(I5);
 
-        I6 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/6.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        icono6 = new ImageIcon(I6);
+        Image I6 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/6.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        ImageIcon icono6 = new ImageIcon(I6);
 
-        I7 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/7.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        icono7 = new ImageIcon(I7);
+        Image I7 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/7.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        ImageIcon icono7 = new ImageIcon(I7);
 
-        I8 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/8.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        icono8 = new ImageIcon(I8);
+        Image I8 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/8.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        ImageIcon icono8 = new ImageIcon(I8);
 
-        I9 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/9.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        icono9 = new ImageIcon(I9);
+        Image I9 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/9.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        ImageIcon icono9 = new ImageIcon(I9);
 
-        I10 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/10.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        icono10 = new ImageIcon(I10);
+        Image I10 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/10.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        ImageIcon icono10 = new ImageIcon(I10);
 
-        I11 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/11.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        icono11 = new ImageIcon(I11);
+        Image I11 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/11.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        ImageIcon icono11 = new ImageIcon(I11);
 
-        I12 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/12.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        icono12 = new ImageIcon(I12);
+        Image I12 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/12.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        ImageIcon icono12 = new ImageIcon(I12);
 
-        I13 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/13.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        icono13 = new ImageIcon(I13);
+        Image I13 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/13.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        ImageIcon icono13 = new ImageIcon(I13);
 
-        I14 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/14.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        icono14 = new ImageIcon(I14);
+        Image I14 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/14.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        ImageIcon icono14 = new ImageIcon(I14);
 
-        I15 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/15.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        icono15 = new ImageIcon(I15);
+        Image I15 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/15.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        ImageIcon icono15 = new ImageIcon(I15);
 
-        I16 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/16.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        icono16 = new ImageIcon(I16);
+        Image I16 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/16.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        ImageIcon icono16 = new ImageIcon(I16);
 
-        I17 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/17.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        icono17 = new ImageIcon(I17);
+        Image I17 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/17.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        ImageIcon icono17 = new ImageIcon(I17);
 
-        I18 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/18.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        icono18 = new ImageIcon(I18);
+        Image I18 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/18.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        ImageIcon icono18 = new ImageIcon(I18);
 
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
-                correcto = false;
+                boolean correcto = false;
                 while (!correcto) {
                     posicion = (int) Math.floor(Math.random() * (18 - 1 + 1) + 1);
 
@@ -102,7 +107,7 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
                         correcto = true;
 
                         botones[i][j] = new Accion(iconoOculto);
-                        botones[i][j].setBackground(fondo);
+                        botones[i][j].setBackground(new Color(0, 0, 0));
                         botones[i][j].setSize(120, 120);
                         botones[i][j].addActionListener(this);
                         botones[i][j].addMouseListener(this);
@@ -303,20 +308,20 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
         add(botones[5][5]);
 
         /* Panel de componentes */
-        panel = new JPanel();
+        JPanel panel = new JPanel();
         panel.setBounds(800, 250, 325, 535);
         panel.setBackground(new Color(0, 0, 0));
         panel.setLayout(null);
         add(panel);
 
-        puntuacion = new JLabel("Puntuación:");
+        JLabel puntuacion = new JLabel("Puntuación:");
         puntuacion.setBounds(58, 430, 166, 43);
-        auxFont = puntuacion.getFont();
+        Font auxFont = puntuacion.getFont();
         puntuacion.setFont(new Font(auxFont.getFontName(), auxFont.getStyle(), 20));
         puntuacion.setForeground(Color.WHITE);
         panel.add(puntuacion);
 
-        movs = new JLabel("Movimientos:");
+        JLabel movs = new JLabel("Movimientos:");
         movs.setBounds(45, 468, 191, 43);
         auxFont = movs.getFont();
         movs.setFont(new Font(auxFont.getFontName(), auxFont.getStyle(), 20));
@@ -328,7 +333,7 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
         auxFont = jugar.getFont();
         jugar.setFont(new Font(auxFont.getFontName(), auxFont.getStyle(), 20));
         jugar.setForeground(Color.WHITE);
-        jugar.setBackground(new Color(115, 113, 119));
+        jugar.setBackground(new Color(102, 94, 128));
         jugar.addActionListener(this);
         panel.add(jugar);
 
@@ -346,7 +351,7 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
         numMovs.setForeground(Color.WHITE);
         panel.add(numMovs);
 
-        logo = new JLabel();
+        JLabel logo = new JLabel();
         imagenL = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/logo.png")));
         logo.setIcon(imagenL);
         logo.setBounds(907, 1, 180, 180);
@@ -358,13 +363,13 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
         titulo.setBounds(813, 143, 300, 100);
         add(titulo);
 
-        reloj = new JLabel();
-        imagenR = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/mask.png")));
+        JLabel reloj = new JLabel();
+        ImageIcon imagenR = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/mask.png")));
         reloj.setIcon(imagenR);
         reloj.setBounds(64, 185, 83, 83);
         panel.add(reloj);
 
-        seleccionarLabel = new JLabel("Selecciona la dificultad");
+        JLabel seleccionarLabel = new JLabel("Selecciona la dificultad");
         seleccionarLabel.setBounds(50, 30, 500, 43);
         auxFont = seleccionarLabel.getFont();
         seleccionarLabel.setFont(new Font(auxFont.getFontName(), auxFont.getStyle(), 20));
@@ -379,7 +384,7 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
         dificultad.addActionListener(this);
         panel.add(dificultad);
 
-        tiempoRestanteLabel = new JLabel("Tiempo restante:");
+        JLabel tiempoRestanteLabel = new JLabel("Tiempo restante:");
         tiempoRestanteLabel.setBounds(80, 130, 500, 43);
         auxFont = tiempoRestanteLabel.getFont();
         tiempoRestanteLabel.setFont(new Font(auxFont.getFontName(), auxFont.getStyle(), 20));
@@ -404,6 +409,7 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
         ventana.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         ventana.setLocationRelativeTo(null);
         ventana.setResizable(false);
+        musica();
     }
 
     /* Manda el tiempo del combo al label que lo muestra */
@@ -519,6 +525,31 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
         titulo.setIcon(imagenT);
         timer.stop();
         jugar.setText("Reintentar");
+    }
+
+    /* Reproduce la musica de fondo */
+    public void musica() {
+        String ruta = "/recursos/Hollow Knight.wav";
+        Clip clip;
+        try {
+            clip = AudioSystem.getClip();
+            clip.open(AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResource(ruta))));
+            clip.start();
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+        } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    /*Mensaje*/
+    public void mensaje() {
+        JLabel label = new JLabel("Selecciona una dificultad", JLabel.CENTER);
+        label.setForeground(new Color(255, 255, 255));
+        UIManager.put("OptionPane.background", new Color(26, 26, 26));
+        UIManager.put("Button.background", new Color(102, 94, 128));
+        UIManager.put("Panel.background", new Color(26, 26, 26));
+        UIManager.put("Button.foreground", new Color(255, 255, 255));
+        JOptionPane.showMessageDialog(null, label, "Memorama Mensaje", JOptionPane.PLAIN_MESSAGE);
     }
 
     @Override
@@ -701,7 +732,7 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
 
         if (e.getSource() == jugar) {
             if (Objects.equals(dificultad.getSelectedItem(), "")) {
-                JOptionPane.showMessageDialog(null, "Selecciona la dificultad.");
+                mensaje();
             } else {
                 cambiarEstado(jugar.getText());
             }
