@@ -8,90 +8,87 @@ import javax.swing.Timer;
 
 public class MemoramaGame extends JFrame implements ActionListener, MouseListener {
 
+    private Accion anterior = new Accion();
     private Accion[][] botones = new Accion[6][6];
+
     private JButton jugar;
     private JLabel puntaje, numMovs, titulo, logo, reloj, tiempo, puntuacion, movs, seleccionarLabel, tiempoRestanteLabel;
     private Image I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, I17, I18, oculto;
     private ImageIcon iconoOculto, icono1, icono2, icono3, icono4, icono5, icono6, icono7, icono8, icono9, icono10, icono11, icono12, icono13, icono14, icono15, icono16, icono17, icono18;
+    private ImageIcon imagenT, imagenL, imagenR;
     private Color fondo = new Color(0, 0, 0);
-    private int[] verificador = new int[18];
-    private int posicion;
-    private boolean correcto = false, pulsado = false, fallo = false;
-    private Accion anterior = new Accion();
-    private JFrame resultados;
     private JPanel panel;
     private Font auxFont;
-    private ImageIcon imagenT, imagenL, imagenR;
     private JComboBox dificultad;
-
-    private int puntos = 0, movimientos = 0, restantes = 18;
-    private int estado;
     private Timer timer;
-    private int tiempoRestante;
 
+    private int posicion, tiempoRestante;
+    private int puntos = 0, movimientos = 0, restantes = 18;
+    private int[] verificador = new int[18];
+    private boolean correcto = false, pulsado = false, fallo = false;
 
     public MemoramaGame() {
         setLayout(null);
 
         setTitle("Memorama");
 
-        setIconImage(new ImageIcon("src/recursos/intriga.png").getImage());
+        setIconImage(new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/oculto.png"))).getImage());
 
-        oculto = new ImageIcon("src/recursos/intriga.png").getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT);
+        oculto = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/oculto.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT);
         iconoOculto = new ImageIcon(oculto);
 
-        I1 = new ImageIcon("src/recursos/1.jpg").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        I1 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/1.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
         icono1 = new ImageIcon(I1);
 
-        I2 = new ImageIcon("src/recursos/2.jpg").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        I2 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/2.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
         icono2 = new ImageIcon(I2);
 
-        I3 = new ImageIcon("src/recursos/3.jpg").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        I3 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/3.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
         icono3 = new ImageIcon(I3);
 
-        I4 = new ImageIcon("src/recursos/4.jpg").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        I4 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/4.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
         icono4 = new ImageIcon(I4);
 
-        I5 = new ImageIcon("src/recursos/5.jpg").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        I5 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/5.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
         icono5 = new ImageIcon(I5);
 
-        I6 = new ImageIcon("src/recursos/6.jpg").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        I6 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/6.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
         icono6 = new ImageIcon(I6);
 
-        I7 = new ImageIcon("src/recursos/7.jpg").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        I7 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/7.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
         icono7 = new ImageIcon(I7);
 
-        I8 = new ImageIcon("src/recursos/8.png").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        I8 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/8.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
         icono8 = new ImageIcon(I8);
 
-        I9 = new ImageIcon("src/recursos/9.jpg").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        I9 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/9.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
         icono9 = new ImageIcon(I9);
 
-        I10 = new ImageIcon("src/recursos/10.jpg").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        I10 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/10.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
         icono10 = new ImageIcon(I10);
 
-        I11 = new ImageIcon("src/recursos/11.png").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        I11 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/11.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
         icono11 = new ImageIcon(I11);
 
-        I12 = new ImageIcon("src/recursos/12.jpg").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        I12 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/12.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
         icono12 = new ImageIcon(I12);
 
-        I13 = new ImageIcon("src/recursos/13.jpg").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        I13 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/13.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
         icono13 = new ImageIcon(I13);
 
-        I14 = new ImageIcon("src/recursos/14.jpg").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        I14 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/14.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
         icono14 = new ImageIcon(I14);
 
-        I15 = new ImageIcon("src/recursos/15.jpg").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        I15 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/15.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
         icono15 = new ImageIcon(I15);
 
-        I16 = new ImageIcon("src/recursos/16.jpg").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        I16 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/16.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
         icono16 = new ImageIcon(I16);
 
-        I17 = new ImageIcon("src/recursos/17.jpg").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        I17 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/17.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
         icono17 = new ImageIcon(I17);
 
-        I18 = new ImageIcon("src/recursos/18.jpeg").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        I18 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/18.png"))).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
         icono18 = new ImageIcon(I18);
 
         for (int i = 0; i < 6; i++) {
@@ -110,6 +107,7 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
                         botones[i][j].addActionListener(this);
                         botones[i][j].addMouseListener(this);
                         botones[i][j].setID(posicion);
+                        botones[i][j].setEnabled(false);
 
                         switch (posicion) {
                             case 1:
@@ -304,9 +302,10 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
         botones[5][5].setLocation(665, 665);
         add(botones[5][5]);
 
+        /* Panel de componentes */
         panel = new JPanel();
         panel.setBounds(800, 250, 325, 535);
-        panel.setBackground(new Color(255, 255, 255));
+        panel.setBackground(new Color(0, 0, 0));
         panel.setLayout(null);
         add(panel);
 
@@ -314,14 +313,14 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
         puntuacion.setBounds(58, 430, 166, 43);
         auxFont = puntuacion.getFont();
         puntuacion.setFont(new Font(auxFont.getFontName(), auxFont.getStyle(), 20));
-        puntuacion.setForeground(Color.BLACK);
+        puntuacion.setForeground(Color.WHITE);
         panel.add(puntuacion);
 
         movs = new JLabel("Movimientos:");
         movs.setBounds(45, 468, 191, 43);
         auxFont = movs.getFont();
         movs.setFont(new Font(auxFont.getFontName(), auxFont.getStyle(), 20));
-        movs.setForeground(Color.BLACK);
+        movs.setForeground(Color.WHITE);
         panel.add(movs);
 
         jugar = new JButton("Comenzar");
@@ -329,7 +328,7 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
         auxFont = jugar.getFont();
         jugar.setFont(new Font(auxFont.getFontName(), auxFont.getStyle(), 20));
         jugar.setForeground(Color.WHITE);
-        jugar.setBackground(new Color(200, 172, 255));
+        jugar.setBackground(new Color(115, 113, 119));
         jugar.addActionListener(this);
         panel.add(jugar);
 
@@ -337,30 +336,30 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
         puntaje.setBounds(175, 430, 35, 43);
         auxFont = puntaje.getFont();
         puntaje.setFont(new Font(auxFont.getFontName(), auxFont.getStyle(), 20));
-        puntaje.setForeground(Color.BLACK);
+        puntaje.setForeground(Color.WHITE);
         panel.add(puntaje);
 
         numMovs = new JLabel("0");
         numMovs.setBounds(175, 449, 305, 80);
         auxFont = numMovs.getFont();
         numMovs.setFont(new Font(auxFont.getFontName(), auxFont.getStyle(), 20));
-        numMovs.setForeground(Color.BLACK);
+        numMovs.setForeground(Color.WHITE);
         panel.add(numMovs);
 
-        titulo = new JLabel();
-        imagenT = new ImageIcon(Objects.requireNonNull(getClass().getResource("../recursos/titulo.png")));
-        titulo.setIcon(imagenT);
-        titulo.setBounds(813, 163, 300, 80);
-        add(titulo);
-
         logo = new JLabel();
-        imagenL = new ImageIcon(Objects.requireNonNull(getClass().getResource("../recursos/imagenlogo.png")));
+        imagenL = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/logo.png")));
         logo.setIcon(imagenL);
-        logo.setBounds(910, 20, 180, 180);
+        logo.setBounds(907, 1, 180, 180);
         add(logo);
 
+        titulo = new JLabel();
+        imagenT = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/titulomemo.png")));
+        titulo.setIcon(imagenT);
+        titulo.setBounds(813, 143, 300, 100);
+        add(titulo);
+
         reloj = new JLabel();
-        imagenR = new ImageIcon(Objects.requireNonNull(getClass().getResource("../recursos/reloj.png")));
+        imagenR = new ImageIcon(Objects.requireNonNull(getClass().getResource("/recursos/mask.png")));
         reloj.setIcon(imagenR);
         reloj.setBounds(64, 185, 83, 83);
         panel.add(reloj);
@@ -369,12 +368,12 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
         seleccionarLabel.setBounds(50, 30, 500, 43);
         auxFont = seleccionarLabel.getFont();
         seleccionarLabel.setFont(new Font(auxFont.getFontName(), auxFont.getStyle(), 20));
-        seleccionarLabel.setForeground(Color.BLACK);
+        seleccionarLabel.setForeground(Color.WHITE);
         panel.add(seleccionarLabel);
 
         dificultad = new JComboBox();
         dificultad.setBounds(65, 70, 185, 30);
-        for (String s : Arrays.asList("", "Fácil: 120 seg.", "Normal: 60 seg.", "Dificil: 30 seg.")) {
+        for (String s : Arrays.asList("", "Fácil: 120 seg.", "Normal: 90 seg.", "Dificil: 60 seg.", "Alma de acero: 30 seg.")) {
             dificultad.addItem(s);
         }
         dificultad.addActionListener(this);
@@ -384,31 +383,32 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
         tiempoRestanteLabel.setBounds(80, 130, 500, 43);
         auxFont = tiempoRestanteLabel.getFont();
         tiempoRestanteLabel.setFont(new Font(auxFont.getFontName(), auxFont.getStyle(), 20));
-        tiempoRestanteLabel.setForeground(Color.BLACK);
+        tiempoRestanteLabel.setForeground(Color.WHITE);
         panel.add(tiempoRestanteLabel);
 
         tiempo = new JLabel("000");
         tiempo.setBounds(160, 180, 100, 100);
         auxFont = tiempo.getFont();
         tiempo.setFont(new Font(auxFont.getFontName(), auxFont.getStyle(), 50));
-        tiempo.setForeground(Color.BLACK);
+        tiempo.setForeground(Color.WHITE);
         panel.add(tiempo);
 
     }
 
+    /* Ventana del juego */
     public void ventana() {
         MemoramaGame ventana = new MemoramaGame();
         ventana.setSize(1160, 840);
-        ventana.getContentPane().setBackground(new Color(255, 248, 156));
+        ventana.getContentPane().setBackground(new Color(26, 26, 26));
         ventana.setVisible(true);
         ventana.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         ventana.setLocationRelativeTo(null);
         ventana.setResizable(false);
     }
 
+    /* Manda el tiempo del combo al label que lo muestra */
     public void mandarTiempo() {
         String seleccion = (String) dificultad.getSelectedItem();
-
         if (seleccion != null && !seleccion.isEmpty()) {
             String[] partes = seleccion.split(": ");
             if (partes.length > 1) {
@@ -420,6 +420,7 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
 
     }
 
+    /* Temporizador */
     private void temporizador() {
         // Configurar el Timer para actualizar el JLabel cada segundo
         timer = new Timer(1000, e -> {
@@ -427,15 +428,16 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
             tiempo.setText(String.valueOf(tiempoRestante));
             if (tiempoRestante <= 0) {
                 timer.stop();
-                estado("../recursos/perder.png", false);
+                estado("/recursos/perder.png");
             }
         });
         timer.start();
     }
 
+    /* Compara una casilla con la otra y manda los puntos y movimientos */
     public void comparar(Accion anterior, Accion actual) {
         if (anterior.getID() == actual.getID()) {
-            puntos = puntos + 5;
+            puntos += 5;
             movimientos++;
             restantes--;
 
@@ -446,14 +448,11 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
             actual.setEnabled(false);
 
             if (restantes == 0) {
-                estado("../recursos/ganar.png", true);
+                estado("/recursos/ganar.png");
             }
 
-
         } else {
-            puntos--;
             movimientos++;
-            puntaje.setText(Integer.toString(puntos));
             numMovs.setText(Integer.toString(movimientos));
             fallo = true;
         }
@@ -461,40 +460,51 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
         pulsado = false;
     }
 
+    /* Cambia los estados del boton de comenzar de acuerdo al estado del juego actual ✅ */
     private void cambiarEstado(String text) {
-        //this.estado = (this.estado + 1) % 3;
         switch (text) {
-            case "Reintentar" -> {
-                jugar.setText("Comenzar");
-                accionAlPerder();
-            }
             case "Comenzar" -> {
                 jugar.setText("Rendirse");
                 accionAlComenzar();
             }
             case "Rendirse" -> {
                 jugar.setText("Reintentar");
-                accionAntesDeComenzar();
+                accionDespuesDeComenzar();
+            }
+            case "Reintentar" -> {
+                jugar.setText("Comenzar");
+                accionAlPerder();
             }
         }
     }
 
+    /* Comienza el juego */
+    private void accionAlComenzar() {
+        temporizador();
+        estadoCasillas();
+    }
+
+    /* Termina el juego */
+    private void accionDespuesDeComenzar() {
+        estado("/recursos/perder.png");
+    }
+
+    /* Reinicia el juego */
     private void accionAlPerder() {
         dispose();
         ventana();
-        System.out.println("Se reinicio");
     }
 
-    private void accionAlComenzar() {
-        temporizador();
-        System.out.println("Comenzo el juego");
+    /* Bloquea o desbloquea las casillas segun se requiera */
+    private void estadoCasillas() {
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 6; j++) {
+                botones[i][j].setEnabled(true);
+            }
+        }
     }
 
-    private void accionAntesDeComenzar() {
-        estado("../recursos/perder.png", false);
-        System.out.println("Termino el juego");
-    }
-
+    /* Devuelve al estado orignal en caso de fallar */
     public void devolver(Accion anterior, Accion actual) {
         anterior.setUsado(false);
         actual.setUsado(false);
@@ -503,21 +513,12 @@ public class MemoramaGame extends JFrame implements ActionListener, MouseListene
         fallo = false;
     }
 
-    public void estado(String urlImage, boolean partida) {
+    /* Detiene y cambia los elementos dependiendo de si gaste o perdiste ✅*/
+    public void estado(String urlImage) {
         imagenT = new ImageIcon(Objects.requireNonNull(getClass().getResource(urlImage)));
-        if (partida) {
-            titulo.setIcon(imagenT);
-            System.out.println("Ganador");
-            timer.stop();
-            this.estado = 1;
-            jugar.setText("Reintentar");
-        } else {
-            titulo.setIcon(imagenT);
-            System.out.println("Perdiste");
-            timer.stop();
-            this.estado = 2;
-            jugar.setText("Reintentar");
-        }
+        titulo.setIcon(imagenT);
+        timer.stop();
+        jugar.setText("Reintentar");
     }
 
     @Override
