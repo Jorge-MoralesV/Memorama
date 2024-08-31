@@ -4,3 +4,5 @@ Memorama basado en Hollow knight:
 
 Los archivos jar y bat para ejecucion:
 https://drive.google.com/drive/folders/1jHoRKXZnXScrT7qGHwHSO-XGpNFtleY3?usp=drive_link
+
+Ejcutar el archivo .bat para que se ejecute la aplicación
